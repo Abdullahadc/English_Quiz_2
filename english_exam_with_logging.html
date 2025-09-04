@@ -3,36 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>English Exam – 15 MCQs (9 minutes)</title>
+<title>English MCQ Exam — 30 Questions (18 minutes)</title>
 <style>
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwbkfY6R8ODiNebUm2XLAUjQkyCwcoJCr8XLM8NmOSofBF-1w-WWD5QdpjceaOLBGX5Og/exec';
-const SECRET   = 'SECRET = 'CHANGE_ME_TOKEN';
-
-  body { background:linear-gradient(120deg,#89f7fe,#66a6ff); font-family: Arial, sans-serif; margin:20px; }
-  h1 { text-align:center; color:#111; }
-  #timer { position:fixed; top:15px; right:20px; font-size:18px; font-weight:bold; color:#111; background:rgba(255,255,255,.75); padding:6px 10px; border-radius:10px; border:1px solid rgba(0,0,0,.08); }
-  .login, .question, #result { background:#fff; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); margin:15px auto; padding:20px; max-width:900px;}
-  .options label { display:block; margin:6px 0; padding:8px 10px; border-radius:8px; cursor:pointer; background:#f8f8f8; border:1px solid #e1e1e1; }
-  .options input { margin-right:8px; }
-  .selected { background:#d0ebff; border-color:#9ad1ff; }
-  .correct { color:#15803d; font-weight:bold; }
-  .wrong { color:#b91c1c; font-weight:bold; }
-  .rightChoice { background:#dcfce7; border-color:#86efac; }
-  .wrongChoice { background:#fee2e2; border-color:#fecaca; }
-  .explanation { font-size:0.95em; color:#333; margin-top:8px; background:#f1f5f9; padding:8px; border-radius:8px; border:1px dashed #cbd5e1; }
-  button { padding:10px 18px; margin-top:15px; border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer; }
-  button:disabled { opacity:.6; cursor:not-allowed; }
-  .btn-primary { background:#0ea5e9; }
-  .btn-primary:hover { background:#0284c7; }
-  .btn-accent { background:#ef4444; }
-  .btn-accent:hover { background:#dc2626; }
-  .muted { color:#475569; }
+  /* Green-preferred theme */
+  :root {
+    --bg1:#e6ffe6;
+    --bg2:#ccf6d9;
+    --primary:#16a34a;  /* green */
+    --accent:#0ea5e9;   /* cyan */
+    --danger:#ef4444;   /* red */
+    --ink:#0f172a;      /* slate-900 */
+    --muted:#475569;    /* slate-600 */
+    --option-bg:#f8fafc; /* slate-50 */
+    --selected:#dbeafe;  /* light blue */
+    --correct-bg:#dcfce7;
+    --correct-bd:#86efac;
+    --wrong-bg:#fee2e2;
+    --wrong-bd:#fecaca;
+  }
+  body { background:linear-gradient(135deg,var(--bg1),var(--bg2)); font-family: Arial, Helvetica, sans-serif; margin:20px; }
+  h1 { text-align:center; color:var(--ink); letter-spacing:.3px; }
+  #timer { position:fixed; top:12px; right:16px; font-size:18px; font-weight:800; color:var(--ink);
+           background:rgba(255,255,255,.85); padding:8px 12px; border-radius:12px; border:2px solid rgba(0,0,0,.06); }
+  .login, .question, #result { background:#fff; border-radius:14px; box-shadow:0 6px 16px rgba(0,0,0,.12); margin:16px auto; padding:22px; max-width:980px; }
+  .login h3 { margin:0 0 10px 0; color:var(--ink) }
+  .question > p { font-weight:800; color:#1e293b; /* bold question text */ }
+  .options label { display:block; margin:7px 0; padding:10px 12px; border-radius:10px; cursor:pointer; background:var(--option-bg); border:1px solid #e2e8f0; font-weight:600; }
+  .options input { margin-right:9px; transform:scale(1.1); }
+  .selected { background:var(--selected); border-color:#93c5fd; }
+  .correct { color:var(--primary); font-weight:900; }
+  .wrong { color:var(--danger); font-weight:900; }
+  .rightChoice { background:var(--correct-bg); border-color:var(--correct-bd); }
+  .wrongChoice { background:var(--wrong-bg); border-color:var(--wrong-bd); }
+  .explanation { font-size:0.96em; color:#0f172a; margin-top:10px; background:#f1f5f9; padding:10px 12px; border-radius:10px; border:1px dashed #cbd5e1; }
+  button { padding:11px 18px; margin-top:16px; border:none; border-radius:10px; color:#fff; font-weight:800; cursor:pointer; letter-spacing:.2px; }
+  .btn-primary { background:var(--primary); }
+  .btn-primary:hover { filter:brightness(.95); }
+  .btn-accent { background:var(--danger); }
+  .btn-accent:hover { filter:brightness(.92); }
+  .muted { color:var(--muted); }
 </style>
 </head>
 <body>
-
-<h1>English Exam – 15 MCQs (9 minutes)</h1>
-<div id="timer">Time: 09:00</div>
+<h1>English MCQ Exam — 30 Questions (18 minutes)</h1>
+<div id="timer">Time: 18:00</div>
 
 <div class="login" id="loginBox">
   <h3>Enter Your Details</h3>
@@ -44,33 +58,315 @@ const SECRET   = 'SECRET = 'CHANGE_ME_TOKEN';
 
 <form id="quizForm" style="display:none;">
 
-  <!-- Example question block (copy for 15) -->
-  <div class="question" data-answer="A" data-explanation="Write the explanation for this question here.">
-    <p>1. Question 1: Write your question text here.</p>
+  <div class="question" data-answer="C" data-explanation="‘All at once’ = suddenly.">
+    <p>1. All at once means —</p>
     <div class="options">
-      <label><input type="radio" name="q1" value="A"> Option A</label>
-      <label><input type="radio" name="q1" value="B"> Option B</label>
-      <label><input type="radio" name="q1" value="C"> Option C</label>
-      <label><input type="radio" name="q1" value="D"> Option D</label>
+      <label><input type="radio" name="q1" value="A"> quickly</label>
+      <label><input type="radio" name="q1" value="B"> slowly</label>
+      <label><input type="radio" name="q1" value="C"> suddenly</label>
+      <label><input type="radio" name="q1" value="D"> gradually</label>
     </div>
   </div>
 
-  <!-- ... add questions up to 15 like above ... -->
+  <div class="question" data-answer="B" data-explanation="‘At stake’ = at risk/endangered.">
+    <p>2. His life is at stake means —</p>
+    <div class="options">
+      <label><input type="radio" name="q2" value="A"> free from danger</label>
+      <label><input type="radio" name="q2" value="B"> endangered</label>
+      <label><input type="radio" name="q2" value="C"> to be doomed</label>
+      <label><input type="radio" name="q2" value="D"> out of danger</label>
+    </div>
+  </div>
 
+  <div class="question" data-answer="D" data-explanation="Idiom meaning ‘someone very dear’. ">
+    <p>3. Apple of one’s eye means —</p>
+    <div class="options">
+      <label><input type="radio" name="q3" value="A"> Apple-like eye</label>
+      <label><input type="radio" name="q3" value="B"> Big eye</label>
+      <label><input type="radio" name="q3" value="C"> Apple-coloured eye</label>
+      <label><input type="radio" name="q3" value="D"> Extremely favourite</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="B" data-explanation="‘At daggers drawn’ = hostile/in enmity.">
+    <p>4. At daggers drawn means —</p>
+    <div class="options">
+      <label><input type="radio" name="q4" value="A"> to be in a state of understanding</label>
+      <label><input type="radio" name="q4" value="B"> to be in a state of hostility</label>
+      <label><input type="radio" name="q4" value="C"> very slowly</label>
+      <label><input type="radio" name="q4" value="D"> at a standstill</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="D" data-explanation="‘At a snail’s pace’ = very slowly.">
+    <p>5. The old man works at a snail’s pace means —</p>
+    <div class="options">
+      <label><input type="radio" name="q5" value="A"> He works smoothly</label>
+      <label><input type="radio" name="q5" value="B"> He works carefully</label>
+      <label><input type="radio" name="q5" value="C"> He works steadily</label>
+      <label><input type="radio" name="q5" value="D"> He works slowly</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="D" data-explanation="‘After one’s own heart’ = to one’s taste/liking.">
+    <p>6. The expression after one’s own heart means —</p>
+    <div class="options">
+      <label><input type="radio" name="q6" value="A"> To be in low spirit</label>
+      <label><input type="radio" name="q6" value="B"> To be in high spirit</label>
+      <label><input type="radio" name="q6" value="C"> With complete devotion</label>
+      <label><input type="radio" name="q6" value="D"> To one’s own liking</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Obtrusive = noticeable, too conspicuous.">
+    <p>7. The word ‘obtrusive’ is synonymous with —</p>
+    <div class="options">
+      <label><input type="radio" name="q7" value="A"> conspicuous</label>
+      <label><input type="radio" name="q7" value="B"> unlikely</label>
+      <label><input type="radio" name="q7" value="C"> unimpressive</label>
+      <label><input type="radio" name="q7" value="D"> unforeseen</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="C" data-explanation="Amortization = gradual write‑off of a cost/debt.">
+    <p>8. The word ‘amortization’ is the synonym of —</p>
+    <div class="options">
+      <label><input type="radio" name="q8" value="A"> amicable settlement</label>
+      <label><input type="radio" name="q8" value="B"> to pay back at a time</label>
+      <label><input type="radio" name="q8" value="C"> write-off</label>
+      <label><input type="radio" name="q8" value="D"> payback in installments</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="C" data-explanation="Untidy = messy/not neat.">
+    <p>9. My reading room is untidy. ‘untidy’ means —</p>
+    <div class="options">
+      <label><input type="radio" name="q9" value="A"> loose</label>
+      <label><input type="radio" name="q9" value="B"> tight</label>
+      <label><input type="radio" name="q9" value="C"> messy</label>
+      <label><input type="radio" name="q9" value="D"> neat</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Domestic ↔ foreign.">
+    <p>10. The antonym of the word ‘domestic’ is —</p>
+    <div class="options">
+      <label><input type="radio" name="q10" value="A"> foreign</label>
+      <label><input type="radio" name="q10" value="B"> home</label>
+      <label><input type="radio" name="q10" value="C"> national</label>
+      <label><input type="radio" name="q10" value="D"> none</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Fecund (fertile) ↔ sterile.">
+    <p>11. Antonym of the word ‘fecund’ is —</p>
+    <div class="options">
+      <label><input type="radio" name="q11" value="A"> sterile</label>
+      <label><input type="radio" name="q11" value="B"> prolific</label>
+      <label><input type="radio" name="q11" value="C"> distress</label>
+      <label><input type="radio" name="q11" value="D"> rich</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="C" data-explanation="Idiom: take someone’s pulse.">
+    <p>12. Which one is correct sentence?</p>
+    <div class="options">
+      <label><input type="radio" name="q12" value="A"> The doctor found my pulse.</label>
+      <label><input type="radio" name="q12" value="B"> The doctor examined my pulse.</label>
+      <label><input type="radio" name="q12" value="C"> The doctor took my pulse.</label>
+      <label><input type="radio" name="q12" value="D"> The doctor saw my pulse.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Only A is standard English.">
+    <p>13. Choose the correct sentence.</p>
+    <div class="options">
+      <label><input type="radio" name="q13" value="A"> He gave me some advice.</label>
+      <label><input type="radio" name="q13" value="B"> I am very better today.</label>
+      <label><input type="radio" name="q13" value="C"> The goodest of my friends.</label>
+      <label><input type="radio" name="q13" value="D"> The requested for my help.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="B" data-explanation="Discuss takes no ‘about’.">
+    <p>14. Choose the correct sentence.</p>
+    <div class="options">
+      <label><input type="radio" name="q14" value="A"> We were discussing about the whole matter.</label>
+      <label><input type="radio" name="q14" value="B"> We were discussing the matter.</label>
+      <label><input type="radio" name="q14" value="C"> We were discussing totally about the matter.</label>
+      <label><input type="radio" name="q14" value="D"> We were discussing about the matter.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Use ‘Look up the word in the dictionary’.">
+    <p>15. Find out the incorrect sentence.</p>
+    <div class="options">
+      <label><input type="radio" name="q15" value="A"> See the word in the dictionary.</label>
+      <label><input type="radio" name="q15" value="B"> The rice of Dhaka is better than that of Rajshahi.</label>
+      <label><input type="radio" name="q15" value="C"> Mr. Rahim is on the committee.</label>
+      <label><input type="radio" name="q15" value="D"> The patient had died before the doctor came.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="C" data-explanation="‘Scarcely any money’ is correct usage.">
+    <p>16. Choose the correct sentence.</p>
+    <div class="options">
+      <label><input type="radio" name="q16" value="A"> He prefers to read than to write.</label>
+      <label><input type="radio" name="q16" value="B"> He is comparatively better today.</label>
+      <label><input type="radio" name="q16" value="C"> He has scarcely any money.</label>
+      <label><input type="radio" name="q16" value="D"> He speaks fluent than I.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="D" data-explanation="Correct object with ‘discuss’: discussed the matter.">
+    <p>17. Choose the correct sentence.</p>
+    <div class="options">
+      <label><input type="radio" name="q17" value="A"> He says me a fool.</label>
+      <label><input type="radio" name="q17" value="B"> He shook hands me.</label>
+      <label><input type="radio" name="q17" value="C"> They have been to a victory.</label>
+      <label><input type="radio" name="q17" value="D"> We discussed the matter.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="D" data-explanation="Information is uncountable → singular verb.">
+    <p>18. Which one is a correct sentence?</p>
+    <div class="options">
+      <label><input type="radio" name="q18" value="A"> Every students are present today.</label>
+      <label><input type="radio" name="q18" value="B"> Ten kilometers are too far to walk.</label>
+      <label><input type="radio" name="q18" value="C"> Two-third of the students got degrees.</label>
+      <label><input type="radio" name="q18" value="D"> All the information is current.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="B" data-explanation="Idiom: have one’s own way (singular ‘way’).">
+    <p>19. Choose the correct sentence.</p>
+    <div class="options">
+      <label><input type="radio" name="q19" value="A"> Men usually want to have their own ways.</label>
+      <label><input type="radio" name="q19" value="B"> Men usually want to have their own way.</label>
+      <label><input type="radio" name="q19" value="C"> Men usually wants to have their own way.</label>
+      <label><input type="radio" name="q19" value="D"> Men usually want to have his own way.</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="No ‘s’ on hundred when with a numeral; ‘taka’ not pluralized here.">
+    <p>20. Choose the correct expression.</p>
+    <div class="options">
+      <label><input type="radio" name="q20" value="A"> Five hundred taka</label>
+      <label><input type="radio" name="q20" value="B"> Five hundreds takas</label>
+      <label><input type="radio" name="q20" value="C"> Five hundred takas</label>
+      <label><input type="radio" name="q20" value="D"> Five hundreds taka</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Bring about = cause.">
+    <p>21. His pride has — his ruin.</p>
+    <div class="options">
+      <label><input type="radio" name="q21" value="A"> brought about</label>
+      <label><input type="radio" name="q21" value="B"> bring forth</label>
+      <label><input type="radio" name="q21" value="C"> bring out</label>
+      <label><input type="radio" name="q21" value="D"> bring in</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="B" data-explanation="Bring off = succeed in / rescue.">
+    <p>22. The phrasal verb ‘Bring off’ means —</p>
+    <div class="options">
+      <label><input type="radio" name="q22" value="A"> produce</label>
+      <label><input type="radio" name="q22" value="B"> rescue / accomplish successfully</label>
+      <label><input type="radio" name="q22" value="C"> release</label>
+      <label><input type="radio" name="q22" value="D"> publish</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Bring out the best in someone.">
+    <p>23. Working under pressure always brings — the best in him.</p>
+    <div class="options">
+      <label><input type="radio" name="q23" value="A"> out</label>
+      <label><input type="radio" name="q23" value="B"> up</label>
+      <label><input type="radio" name="q23" value="C"> through</label>
+      <label><input type="radio" name="q23" value="D"> in</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="C" data-explanation="Bring out = publish.">
+    <p>24. ‘Publish’ can be stated as —</p>
+    <div class="options">
+      <label><input type="radio" name="q24" value="A"> bring about</label>
+      <label><input type="radio" name="q24" value="B"> bring forth</label>
+      <label><input type="radio" name="q24" value="C"> bring out</label>
+      <label><input type="radio" name="q24" value="D"> bring in</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Burst into tears.">
+    <p>25. Fill in the blank: The girl burst — tears.</p>
+    <div class="options">
+      <label><input type="radio" name="q25" value="A"> into</label>
+      <label><input type="radio" name="q25" value="B"> on</label>
+      <label><input type="radio" name="q25" value="C"> with</label>
+      <label><input type="radio" name="q25" value="D"> out</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Break in = interrupt.">
+    <p>26. It’s impolite to break — when someone else is talking.</p>
+    <div class="options">
+      <label><input type="radio" name="q26" value="A"> in</label>
+      <label><input type="radio" name="q26" value="B"> on</label>
+      <label><input type="radio" name="q26" value="C"> into</label>
+      <label><input type="radio" name="q26" value="D"> off</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Angry about something; angry with someone.">
+    <p>27. What are you so angry — ?</p>
+    <div class="options">
+      <label><input type="radio" name="q27" value="A"> about</label>
+      <label><input type="radio" name="q27" value="B"> at</label>
+      <label><input type="radio" name="q27" value="C"> on</label>
+      <label><input type="radio" name="q27" value="D"> for</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="D" data-explanation="Apart from = except for/besides.">
+    <p>28. Apart — cricket, he does not watch TV.</p>
+    <div class="options">
+      <label><input type="radio" name="q28" value="A"> of</label>
+      <label><input type="radio" name="q28" value="B"> to</label>
+      <label><input type="radio" name="q28" value="C"> on</label>
+      <label><input type="radio" name="q28" value="D"> from</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="A" data-explanation="Alternative to something.">
+    <p>29. There is no alternative — training.</p>
+    <div class="options">
+      <label><input type="radio" name="q29" value="A"> to</label>
+      <label><input type="radio" name="q29" value="B"> for</label>
+      <label><input type="radio" name="q29" value="C"> than</label>
+      <label><input type="radio" name="q29" value="D"> on</label>
+    </div>
+  </div>
+
+  <div class="question" data-answer="D" data-explanation="Agree to a proposal; agree with a person/idea.">
+    <p>30. They did not agree — the proposal.</p>
+    <div class="options">
+      <label><input type="radio" name="q30" value="A"> for</label>
+      <label><input type="radio" name="q30" value="B"> with</label>
+      <label><input type="radio" name="q30" value="C"> on</label>
+      <label><input type="radio" name="q30" value="D"> to</label>
+    </div>
+  </div>
   <button type="submit" class="btn-accent">Submit Answers</button>
 </form>
 
 <div id="result"></div>
 
 <script>
-  // ====== CONFIG (edit these) ======
-  const ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'; // e.g., https://script.google.com/macros/s/xxxxx/exec
-  const SECRET  = 'CHANGE_ME_TOKEN'; // Must match Apps Script SECRET
   const allowedIDs = ["P222","N222","111M","333M","444M","555M"];
-  const subjectKey = "english";
-  let duration = 540; // seconds
+  let duration = 1080;
+  let subjectKey = "english_mcq_30_green";
   let timerInterval;
-  let startTimestamp = null;
 
   function startExam(){
     const name=document.getElementById("name").value.trim();
@@ -78,10 +374,8 @@ const SECRET   = 'SECRET = 'CHANGE_ME_TOKEN';
     if(!name){alert("Please enter your name");return;}
     if(!allowedIDs.includes(userid)){alert("Invalid User ID (use P222, N222, 111M, 333M, 444M, 555M)");return;}
     if(localStorage.getItem("submitted_"+subjectKey+"_"+userid)){alert("This User ID has already submitted this subject.");return;}
-    // Hide login, show quiz
     document.getElementById("loginBox").style.display="none";
     document.getElementById("quizForm").style.display="block";
-    startTimestamp = Date.now();
     startTimer();
   }
 
@@ -89,21 +383,20 @@ const SECRET   = 'SECRET = 'CHANGE_ME_TOKEN';
     const timer=document.getElementById("timer");
     timerInterval=setInterval(()=>{
       let m=Math.floor(duration/60), s=duration%60;
-      timer.textContent="Time:" + " " + String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
+      timer.textContent="Time: " + String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
       if(duration<=0){clearInterval(timerInterval); submitQuiz(true);}
       duration--;
     },1000);
   }
 
-  // Lock answer on first click & mark selected
+  // lock one click & highlight selection
   document.addEventListener("change",function(e){
     if(e.target && e.target.type==="radio"){
       const qBlock=e.target.closest(".question");
       if(!qBlock) return;
       const radios=qBlock.querySelectorAll("input[type=radio]");
       radios.forEach(r=>r.disabled=true);
-      e.target.disabled=false;
-      // visual mark
+      e.target.disabled=false; // keep the chosen one enabled
       qBlock.querySelectorAll(".options label").forEach(l=>l.classList.remove("selected"));
       e.target.parentElement.classList.add("selected");
     }
@@ -113,36 +406,27 @@ const SECRET   = 'SECRET = 'CHANGE_ME_TOKEN';
     e.preventDefault(); submitQuiz(false);
   });
 
-  async function submitQuiz(auto=false){
+  function submitQuiz(auto=false){
     clearInterval(timerInterval);
     const userid=document.getElementById("userid").value.trim();
-    const name=document.getElementById("name").value.trim();
     localStorage.setItem("submitted_"+subjectKey+"_"+userid,true);
 
     let correct=0,wrong=0,notAnswered=0;
     const questions = document.querySelectorAll(".question");
-    const answersObj = {};
-    questions.forEach((q, idx)=>{
-      const qNum = idx+1;
-      const ans=q.dataset.answer?.trim().toUpperCase();
+    questions.forEach(q=>{
+      const ans=q.dataset.answer ? q.dataset.answer.trim().toUpperCase() : "";
       const labels = q.querySelectorAll(".options label");
       const selectedInput = q.querySelector("input[type=radio]:checked");
       const selectedVal = selectedInput ? selectedInput.value : null;
-      answersObj["q"+qNum] = {correct: ans || '', chosen: selectedVal || ''};
 
-      // Mark correctness
       if(!selectedVal){
-        notAnswered++;
-        q.querySelector("p").classList.add("wrong");
+        notAnswered++; q.querySelector("p").classList.add("wrong");
       } else if(selectedVal===ans){
-        correct++;
-        q.querySelector("p").classList.add("correct");
+        correct++; q.querySelector("p").classList.add("correct");
       } else {
-        wrong++;
-        q.querySelector("p").classList.add("wrong");
+        wrong++; q.querySelector("p").classList.add("wrong");
       }
 
-      // Color labels
       labels.forEach(lab=>{
         const inp = lab.querySelector("input[type=radio]");
         if(!inp) return;
@@ -151,60 +435,26 @@ const SECRET   = 'SECRET = 'CHANGE_ME_TOKEN';
         if(selectedVal && v===selectedVal && v!==ans){ lab.classList.add("wrongChoice"); }
       });
 
-      // Show explanation
       const exp=document.createElement("div");
       exp.className="explanation";
       const expText = q.dataset.explanation || "";
-      exp.textContent = "Correct Answer:" + " " + (ans || '-') + " | " + expText;
+      exp.textContent = "Correct Answer: " + ans + " | " + expText;
       q.appendChild(exp);
     });
 
     const total = (correct*1) - (wrong*0.25);
-    const percent = questions.length ? Math.round((correct / questions.length) * 100) : 0;
-    const durationSec = startTimestamp ? Math.round((Date.now() - startTimestamp)/1000) : (540 - duration);
+    document.getElementById("result").innerHTML =
+      '<h3 style="color:#065f46">Summary</h3>' +
+      '<p><b>Answered:</b> ' + (correct+wrong) + '</p>' +
+      '<p><b>Not Answered:</b> ' + notAnswered + '</p>' +
+      '<p><b>Right:</b> ' + correct + '</p>' +
+      '<p><b>Wrong:</b> ' + wrong + '</p>' +
+      '<p><b>Total Marks:</b> ' + total + '</p>' +
+      '<button class="btn-primary" id="printAgain" onclick="window.print()">Print Again</button>';
 
-    document.getElementById("result").innerHTML=`
-      <h3>Summary</h3>
-      <p>Answered: ${correct+wrong}</p>
-      <p>Not Answered: ${notAnswered}</p>
-      <p>Right: ${correct}</p>
-      <p>Wrong: ${wrong}</p>
-      <p><b>Total Marks: ${total}</b></p>
-      <p><b>Percent: ${percent}%</b></p>
-      <button class="btn-primary" id="printAgain" onclick="window.print()">Print Again</button>
-    `;
-
-    // ====== Send to Google Sheet via Apps Script ======
-    if (ENDPOINT && ENDPOINT.startsWith('http')) {
-      try {
-        const payload = {
-          token: SECRET,
-          name,
-          userid,
-          subject: subjectKey,
-          correct,
-          wrong,
-          notAnswered,
-          totalMarks: total,
-          percent,
-          durationSec,
-          answers: answersObj
-        };
-        const res = await fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const json = await res.json();
-        if (!json.ok) console.warn('Score not saved:', json.error);
-      } catch (err) {
-        console.warn('Error saving score:', err);
-      }
-    }
-
-    // Auto print
     window.print();
   }
 </script>
+
 </body>
 </html>
