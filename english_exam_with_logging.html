@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>English Exam – 15 MCQs (9 minutes)</title>
+<style>
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwbkfY6R8ODiNebUm2XLAUjQkyCwcoJCr8XLM8NmOSofBF-1w-WWD5QdpjceaOLBGX5Og/exec';
+const SECRET   = 'SECRET = 'CHANGE_ME_TOKEN';
+
+  body { background:linear-gradient(120deg,#89f7fe,#66a6ff); font-family: Arial, sans-serif; margin:20px; }
+  h1 { text-align:center; color:#111; }
+  #timer { position:fixed; top:15px; right:20px; font-size:18px; font-weight:bold; color:#111; background:rgba(255,255,255,.75); padding:6px 10px; border-radius:10px; border:1px solid rgba(0,0,0,.08); }
+  .login, .question, #result { background:#fff; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); margin:15px auto; padding:20px; max-width:900px;}
+  .options label { display:block; margin:6px 0; padding:8px 10px; border-radius:8px; cursor:pointer; background:#f8f8f8; border:1px solid #e1e1e1; }
+  .options input { margin-right:8px; }
+  .selected { background:#d0ebff; border-color:#9ad1ff; }
+  .correct { color:#15803d; font-weight:bold; }
+  .wrong { color:#b91c1c; font-weight:bold; }
+  .rightChoice { background:#dcfce7; border-color:#86efac; }
+  .wrongChoice { background:#fee2e2; border-color:#fecaca; }
+  .explanation { font-size:0.95em; color:#333; margin-top:8px; background:#f1f5f9; padding:8px; border-radius:8px; border:1px dashed #cbd5e1; }
+  button { padding:10px 18px; margin-top:15px; border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:not-allowed; }
+  .btn-primary { background:#0ea5e9; }
+  .btn-primary:hover { background:#0284c7; }
+  .btn-accent { background:#ef4444; }
+  .btn-accent:hover { background:#dc2626; }
+  .muted { color:#475569; }
+</style>
+</head>
+<body>
+
+<h1>English Exam – 15 MCQs (9 minutes)</h1>
+<div id="timer">Time: 09:00</div>
+
+<div class="login" id="loginBox">
+  <h3>Enter Your Details</h3>
+  <label>Name: <input type="text" id="name"></label><br><br>
+  <label>User ID: <input type="text" id="userid" placeholder="P222 / N222 / 111M / 333M / 444M / 555M"></label><br><br>
+  <button class="btn-primary" onclick="startExam()">Start Exam</button>
+  <p class="muted" style="margin-top:8px">Allowed IDs: P222, N222, 111M, 333M, 444M, 555M</p>
+</div>
+
+<form id="quizForm" style="display:none;">
+
+  <!-- Example question block (copy for 15) -->
+  <div class="question" data-answer="A" data-explanation="Write the explanation for this question here.">
+    <p>1. Question 1: Write your question text here.</p>
+    <div class="options">
+      <label><input type="radio" name="q1" value="A"> Option A</label>
+      <label><input type="radio" name="q1" value="B"> Option B</label>
+      <label><input type="radio" name="q1" value="C"> Option C</label>
+      <label><input type="radio" name="q1" value="D"> Option D</label>
+    </div>
+  </div>
+
+  <!-- ... add questions up to 15 like above ... -->
+
+  <button type="submit" class="btn-accent">Submit Answers</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+  // ====== CONFIG (edit these) ======
+  const ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'; // e.g., https://script.google.com/macros/s/xxxxx/exec
+  const SECRET  = 'CHANGE_ME_TOKEN'; // Must match Apps Script SECRET
+  const allowedIDs = ["P222","N222","111M","333M","444M","555M"];
+  const subjectKey = "english";
+  let duration = 540; // seconds
+  let timerInterval;
+  let startTimestamp = null;
+
+  function startExam(){
+    const name=document.getElementById("name").value.trim();
+    const userid=document.getElementById("userid").value.trim();
+    if(!name){alert("Please enter your name");return;}
+    if(!allowedIDs.includes(userid)){alert("Invalid User ID (use P222, N222, 111M, 333M, 444M, 555M)");return;}
+    if(localStorage.getItem("submitted_"+subjectKey+"_"+userid)){alert("This User ID has already submitted this subject.");return;}
+    // Hide login, show quiz
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("quizForm").style.display="block";
+    startTimestamp = Date.now();
+    startTimer();
+  }
+
+  function startTimer(){
+    const timer=document.getElementById("timer");
+    timerInterval=setInterval(()=>{
+      let m=Math.floor(duration/60), s=duration%60;
+      timer.textContent="Time:" + " " + String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
+      if(duration<=0){clearInterval(timerInterval); submitQuiz(true);}
+      duration--;
+    },1000);
+  }
+
+  // Lock answer on first click & mark selected
+  document.addEventListener("change",function(e){
+    if(e.target && e.target.type==="radio"){
+      const qBlock=e.target.closest(".question");
+      if(!qBlock) return;
+      const radios=qBlock.querySelectorAll("input[type=radio]");
+      radios.forEach(r=>r.disabled=true);
+      e.target.disabled=false;
+      // visual mark
+      qBlock.querySelectorAll(".options label").forEach(l=>l.classList.remove("selected"));
+      e.target.parentElement.classList.add("selected");
+    }
+  });
+
+  document.getElementById("quizForm").addEventListener("submit", function(e){
+    e.preventDefault(); submitQuiz(false);
+  });
+
+  async function submitQuiz(auto=false){
+    clearInterval(timerInterval);
+    const userid=document.getElementById("userid").value.trim();
+    const name=document.getElementById("name").value.trim();
+    localStorage.setItem("submitted_"+subjectKey+"_"+userid,true);
+
+    let correct=0,wrong=0,notAnswered=0;
+    const questions = document.querySelectorAll(".question");
+    const answersObj = {};
+    questions.forEach((q, idx)=>{
+      const qNum = idx+1;
+      const ans=q.dataset.answer?.trim().toUpperCase();
+      const labels = q.querySelectorAll(".options label");
+      const selectedInput = q.querySelector("input[type=radio]:checked");
+      const selectedVal = selectedInput ? selectedInput.value : null;
+      answersObj["q"+qNum] = {correct: ans || '', chosen: selectedVal || ''};
+
+      // Mark correctness
+      if(!selectedVal){
+        notAnswered++;
+        q.querySelector("p").classList.add("wrong");
+      } else if(selectedVal===ans){
+        correct++;
+        q.querySelector("p").classList.add("correct");
+      } else {
+        wrong++;
+        q.querySelector("p").classList.add("wrong");
+      }
+
+      // Color labels
+      labels.forEach(lab=>{
+        const inp = lab.querySelector("input[type=radio]");
+        if(!inp) return;
+        const v = inp.value;
+        if(v===ans){ lab.classList.add("rightChoice"); }
+        if(selectedVal && v===selectedVal && v!==ans){ lab.classList.add("wrongChoice"); }
+      });
+
+      // Show explanation
+      const exp=document.createElement("div");
+      exp.className="explanation";
+      const expText = q.dataset.explanation || "";
+      exp.textContent = "Correct Answer:" + " " + (ans || '-') + " | " + expText;
+      q.appendChild(exp);
+    });
+
+    const total = (correct*1) - (wrong*0.25);
+    const percent = questions.length ? Math.round((correct / questions.length) * 100) : 0;
+    const durationSec = startTimestamp ? Math.round((Date.now() - startTimestamp)/1000) : (540 - duration);
+
+    document.getElementById("result").innerHTML=`
+      <h3>Summary</h3>
+      <p>Answered: ${correct+wrong}</p>
+      <p>Not Answered: ${notAnswered}</p>
+      <p>Right: ${correct}</p>
+      <p>Wrong: ${wrong}</p>
+      <p><b>Total Marks: ${total}</b></p>
+      <p><b>Percent: ${percent}%</b></p>
+      <button class="btn-primary" id="printAgain" onclick="window.print()">Print Again</button>
+    `;
+
+    // ====== Send to Google Sheet via Apps Script ======
+    if (ENDPOINT && ENDPOINT.startsWith('http')) {
+      try {
+        const payload = {
+          token: SECRET,
+          name,
+          userid,
+          subject: subjectKey,
+          correct,
+          wrong,
+          notAnswered,
+          totalMarks: total,
+          percent,
+          durationSec,
+          answers: answersObj
+        };
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (!json.ok) console.warn('Score not saved:', json.error);
+      } catch (err) {
+        console.warn('Error saving score:', err);
+      }
+    }
+
+    // Auto print
+    window.print();
+  }
+</script>
+</body>
+</html>

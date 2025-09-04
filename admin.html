@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exam Scores – Admin</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  h1 { margin-bottom: 8px; }
+  .card { background:#fff; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.12); padding:16px; margin:12px 0; }
+  label { display:inline-block; margin-right:10px; }
+  input, select, button { padding: 8px 10px; margin-right:8px; }
+  table { width:100%; border-collapse: collapse; margin-top: 12px; }
+  th, td { border:1px solid #e5e7eb; padding:8px; text-align:left; }
+  th { background:#f1f5f9; }
+  .muted { color:#475569; font-size: 12px; }
+</style>
+</head>
+<body>
+  <h1>Exam Scores – Admin</h1>
+  <div class="card">
+    <label>Web App URL: <input type="text" id="endpoint" placeholder="https://script.google.com/macros/s/xxxxx/exec" style="width:360px"></label>
+    <label>Token: <input type="text" id="token" placeholder="CHANGE_ME_TOKEN"></label>
+    <button id="loadBtn">Load</button>
+    <button id="exportBtn">Export CSV</button>
+    <div class="muted">Paste your Apps Script Web App URL and token, then click Load.</div>
+  </div>
+
+  <div class="card">
+    <label>Filter Subject: <input type="text" id="fSubject" placeholder="english"></label>
+    <label>Search Name/UserID: <input type="text" id="fSearch" placeholder="mehedi / P222"></label>
+    <button id="applyFilter">Apply Filter</button>
+  </div>
+
+  <div class="card">
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th>Timestamp</th><th>Name</th><th>UserID</th><th>Subject</th>
+          <th>Correct</th><th>Wrong</th><th>NotAnswered</th><th>TotalMarks</th><th>Percent</th><th>DurationSec</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+<script>
+  let rows = [];
+
+  document.getElementById('loadBtn').addEventListener('click', loadData);
+  document.getElementById('applyFilter').addEventListener('click', render);
+
+  async function loadData(){
+    const endpoint = document.getElementById('endpoint').value.trim();
+    const token = document.getElementById('token').value.trim();
+    if(!endpoint || !token){ alert('Enter endpoint and token'); return; }
+    try {
+      const url = new URL(endpoint);
+      url.searchParams.set('action','list');
+      url.searchParams.set('token', token);
+      const res = await fetch(url.toString());
+      const json = await res.json();
+      if(!json.ok){ alert('Error: '+json.error); return; }
+      rows = json.rows || [];
+      render();
+    } catch (e) {
+      alert('Failed to load: '+e);
+    }
+  }
+
+  function render(){
+    const fSub = document.getElementById('fSubject').value.trim().toLowerCase();
+    const fSearch = document.getElementById('fSearch').value.trim().toLowerCase();
+    const tb = document.querySelector('#tbl tbody');
+    tb.innerHTML = '';
+
+    const filtered = rows.filter(r => {
+      const okSub = fSub ? String(r.Subject||'').toLowerCase().includes(fSub) : true;
+      const text = (String(r.Name||'') + ' ' + String(r.UserID||'')).toLowerCase();
+      const okSearch = fSearch ? text.includes(fSearch) : true;
+      return okSub && okSearch;
+    });
+
+    for (const r of filtered){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.Timestamp || ''}</td>
+        <td>${r.Name || ''}</td>
+        <td>${r.UserID || ''}</td>
+        <td>${r.Subject || ''}</td>
+        <td>${r.Correct || 0}</td>
+        <td>${r.Wrong || 0}</td>
+        <td>${r.NotAnswered || 0}</td>
+        <td>${r.TotalMarks || 0}</td>
+        <td>${r.Percent || 0}</td>
+        <td>${r.DurationSec || 0}</td>
+      `;
+      tb.appendChild(tr);
+    }
+  }
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const headers = ['Timestamp','Name','UserID','Subject','Correct','Wrong','NotAnswered','TotalMarks','Percent','DurationSec'];
+    const data = [headers.join(',')].concat(
+      rows.map(r => headers.map(h => String(r[h] || '').replaceAll('"','""')).map(x=>`"${x}"`).join(','))
+    ).join('\n');
+    const blob = new Blob([data], {type:'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'scores.csv';
+    a.click();
+  });
+</script>
+</body>
+</html>
